@@ -1,0 +1,15 @@
+{
+  "name": "graph-agent",
+  "version": "0.1.0",
+  "description": "coding-graph 智能体：pi agent SDK + DeepSeek 多轮对话",
+  "scripts": {
+    "start": "node --env-file=.env server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "^0.84.3"
+  }
+}

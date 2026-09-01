@@ -1,0 +1,220 @@
+/* 知识图谱 · 极简浅米黄主题 */
+:root {
+  --bg: #faf6ec;            /* 更白的浅米黄底 */
+  --ink: #4a4238;
+  --ink-soft: #6d6356;
+  --line: #e0d6c2;
+  --card: #fdfaf3;
+  --accent: #8a7a5f;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app { height: 100%; margin: 0; }
+
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+#kg-canvas { position: absolute; inset: 0; }
+#kg-canvas canvas { display: block; }
+
+/* 悬停高亮由标签层主题环承担；隐藏 sigma 默认 hover 圆点层，避免圆点盖在卡片上 */
+.sigma-hoverNodes { display: none !important; }
+
+/* stage 分界虚竖线（SVG 覆盖层，细虚线，跟随相机变换） */
+.kg-dividers { position: absolute; inset: 0; pointer-events: none; }
+.kg-dividers line {
+  stroke: #b9ab90;
+  stroke-width: 1;
+  stroke-dasharray: 4 7;
+  opacity: 0.5;
+}
+
+/* ---------------- 悬浮工具栏 ---------------- */
+.kg-toolbar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: rgba(250, 246, 236, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(74, 66, 56, 0.12);
+  backdrop-filter: blur(4px);
+  max-width: calc(100vw - 32px);
+  flex-wrap: wrap;
+}
+
+.kg-brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.kg-group { display: flex; gap: 6px; }
+
+.kg-btn {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.kg-btn:hover { background: #efe6d2; }
+.kg-btn.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.kg-sep { width: 1px; height: 22px; background: var(--line); }
+
+/* ---------------- 图谱选择下拉 ---------------- */
+.kg-graphselect {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.kg-graphselect-label {
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.kg-select {
+  max-width: 180px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+.kg-select:focus { outline: 1px solid var(--accent); }
+
+/* ---------------- 维度筛选下拉 ---------------- */
+.kg-dimfilter { position: relative; }
+
+.kg-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 216px;
+  padding: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(74, 66, 56, 0.16);
+  z-index: 30;
+}
+.kg-hidden { display: none; }
+
+.kg-dim-hint { padding: 6px 4px; font-size: 12px; color: var(--ink-soft); }
+.kg-dim-group { margin-bottom: 4px; }
+.kg-dim-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 4px 4px 2px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 2px;
+}
+.kg-dim-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 5px 4px;
+  font-size: 13px;
+}
+.kg-dim-name { color: var(--ink-soft); white-space: nowrap; }
+
+.kg-cycle {
+  min-width: 62px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+}
+.kg-cycle-semi { background: #f1e9d8; color: var(--ink-soft); }
+.kg-cycle-hidden { background: #e8e2d5; color: #b0a795; }
+
+/* ---------------- 图例（右下角悬浮卡片，按层级分组） ---------------- */
+.kg-legend {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(253, 250, 243, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(74, 66, 56, 0.12);
+  backdrop-filter: blur(4px);
+  max-width: 280px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.kg-legend-group { display: flex; flex-direction: column; gap: 6px; }
+.kg-legend-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+}
+.kg-legend-items { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.kg-legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.kg-legend-item i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ---------------- 悬停浮层 ---------------- */
+.kg-tooltip {
+  position: fixed;
+  z-index: 40;
+  min-width: 180px;
+  max-width: 340px;
+  padding: 10px 12px;
+  background: rgba(251, 247, 238, 0.98);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 10px 26px rgba(74, 66, 56, 0.2);
+  font-size: 12px;
+  line-height: 1.6;
+  pointer-events: none;
+}
+.kg-t-row { display: flex; gap: 8px; margin: 2px 0; }
+.kg-t-k { flex: none; color: var(--ink-soft); min-width: 34px; }
+.kg-t-v { color: var(--ink); word-break: break-word; }
+
+.kg-error {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a34b4b;
+  font-size: 15px;
+}

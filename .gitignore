@@ -1,0 +1,19 @@
+# Python / uv
+__pycache__/
+*.pyc
+.env
+data/
+.pytest_cache/
+
+# Node / frontend
+node_modules/
+dist/
+
+# 本地工具缓存（不入库）
+.archlens/
+.graphrepo/
+.claude/skills/
+.agents/growing-graph/
+
+# VS Code 本地设置（含 git.ignoredRepositories，机器相关，不入库）
+.vscode/
